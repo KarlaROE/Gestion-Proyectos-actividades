@@ -1,0 +1,177 @@
+## Pruebas de la API
+
+Una vez iniciada la aplicación, acceder a la documentación interactiva de Swagger:
+
+```text
+http://localhost:8000/docs
+```
+
+---
+
+### Prueba 1: Health Check
+
+Seleccionar el endpoint:
+
+```http
+GET /
+```
+
+Respuesta esperada:
+
+```json
+{
+  "status": "running",
+  "model": "Logistic Regression",
+  "f1_score": 0.9847
+}
+```
+
+---
+
+### Prueba 2: Consulta de Apertura de Cuenta
+
+Endpoint:
+
+```http
+POST /predict
+```
+
+Request:
+
+```json
+{
+  "text": "How can I open an investment account?"
+}
+```
+
+Respuesta esperada:
+
+```json
+{
+  "query": "How can I open an investment account?",
+  "intent": "create_account",
+  "confidence": 0.98
+}
+```
+
+---
+
+### Prueba 3: Rendimiento de Portafolio
+
+Request:
+
+```json
+{
+  "text": "I want to know my portfolio performance"
+}
+```
+
+Respuesta esperada:
+
+```json
+{
+  "intent": "portfolio_performance"
+}
+```
+
+---
+
+### Prueba 4: Recuperación de Contraseña
+
+Request:
+
+```json
+{
+  "text": "I need help recovering my password"
+}
+```
+
+Respuesta esperada:
+
+```json
+{
+  "intent": "recover_password"
+}
+```
+
+---
+
+### Prueba 5: Consulta de Comisiones
+
+Request:
+
+```json
+{
+  "text": "What fees am I paying?"
+}
+```
+
+Respuesta esperada:
+
+```json
+{
+  "intent": "check_fees"
+}
+```
+
+---
+
+### Prueba 6: Caso Extremo - Consulta Vacía
+
+Request:
+
+```json
+{
+  "text": ""
+}
+```
+
+Resultado esperado:
+
+El sistema deberá procesar la solicitud sin generar errores internos y devolver una clasificación válida o un mensaje de validación según la configuración implementada.
+
+---
+
+### Prueba 7: Caso Extremo - Datos No Válidos
+
+Request:
+
+```json
+{
+  "text": "123456789"
+}
+```
+
+Resultado esperado:
+
+El modelo debe responder sin interrupciones y devolver una predicción acompañada de un nivel de confianza.
+
+---
+
+### Prueba 8: Evaluación Multilingüe
+
+Request:
+
+```json
+{
+  "text": "Quiero abrir una cuenta de inversión"
+}
+```
+
+Resultado esperado:
+
+El desempeño disminuye debido a que el modelo fue entrenado principalmente con consultas en inglés. Esta prueba demuestra una limitación conocida del sistema y una oportunidad de mejora futura mediante modelos multilingües o servicios de traducción.
+
+---
+
+## Evidencias Recomendadas
+
+Capturar las siguientes evidencias para el reporte:
+
+1. Swagger UI abierto.
+2. Respuesta del endpoint `GET /`.
+3. Predicción exitosa para una consulta financiera.
+4. Prueba de caso extremo.
+5. Evidencia de ejecución de FastAPI.
+6. Evidencia de ejecución en Docker (si aplica).
+7. Registro del experimento en MLflow.
