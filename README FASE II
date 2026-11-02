@@ -1,1 +1,280 @@
+## Descripción del Proyecto
 
+Este proyecto desarrolla e implementa un sistema de clasificación de intenciones financieras para asistentes conversacionales del sector Wealth Management.
+
+El objetivo es identificar automáticamente la intención de una consulta realizada por un usuario y asignarla a una de las 24 categorías financieras disponibles utilizando técnicas de Procesamiento de Lenguaje Natural (NLP) y Machine Learning.
+
+---
+
+## Objetivo SMART
+
+Desarrollar y evaluar un modelo de clasificación de intenciones financieras capaz de alcanzar un F1-Score superior al 98% sobre el conjunto de prueba independiente, utilizando técnicas de validación cruzada, optimización de hiperparámetros y evaluación estadística antes de dic 2026. 
+
+---
+
+## Dataset
+
+**Fuente:**
+
+Bitext Wealth Management LLM Chatbot Training Dataset
+
+**Casos de uso cubiertos:**
+
+- Wealth Management
+- Investment Portfolio Management
+- Customer Support
+- Risk Assessment
+- Fund Administration
+- Account Management
+
+**Variables utilizadas:**
+
+| Variable | Descripción |
+|-----------|------------|
+| instruction | Consulta realizada por el usuario |
+| intent | Intención financiera objetivo |
+| category | Categoría funcional |
+| tags | Etiquetas auxiliares |
+
+---
+
+## Preparación de Datos
+
+Se aplicaron las siguientes transformaciones:
+
+- Eliminación de registros nulos.
+- Conversión de texto a minúsculas.
+- Normalización de espacios.
+- Eliminación de duplicados.
+- Análisis de calidad de datos.
+- División Train / Validation / Test.
+
+---
+
+## Modelos Evaluados
+
+### Baseline
+
+DummyClassifier
+
+### Logistic Regression
+
+Modelo lineal utilizado como principal candidato debido a:
+
+- Alta interpretabilidad.
+- Bajo costo computacional.
+- Excelente desempeño en NLP.
+
+### Random Forest
+
+Modelo basado en árboles de decisión para capturar relaciones no lineales.
+
+### DistilBERT
+
+Modelo Transformer utilizado como referencia avanzada para clasificación de texto.
+
+---
+
+## Optimización
+
+Se utilizó:
+
+- GridSearchCV
+- Stratified K-Fold Cross Validation
+- Prueba t pareada
+- Curve ROC Multiclase
+- Análisis de Sensibilidad
+- Simulación A/B Testing
+
+---
+
+## Resultados Finales
+
+| Modelo | Accuracy | Precision | Recall | F1 Score |
+|----------|----------|----------|----------|----------|
+| Baseline | 0.0427 | - | - | 0.0035 |
+| Logistic Regression | 0.9846 | 0.9849 | 0.9846 | 0.9847 |
+| Random Forest | 0.9838 | 0.9839 | 0.9838 | 0.9838 |
+
+### Modelo Ganador
+
+🏆 Logistic Regression
+
+### Métricas Finales
+
+- Accuracy: 98.46%
+- Precision: 98.49%
+- Recall: 98.46%
+- F1 Score: 98.47%
+- AUC Macro: 99.98%
+- AUC Weighted: 99.98%
+
+---
+
+## Arquitectura de Despliegue
+
+```text
+Usuario
+   │
+   ▼
+FastAPI
+   │
+   ▼
+Logistic Regression
+   │
+   ▼
+TF-IDF Vectorizer
+   │
+   ▼
+Predicción de Intención
+```
+
+---
+
+## Estructura del Proyecto
+
+```text
+project/
+
+├── deployment/
+│   ├── model.pkl
+│   ├── label_encoder.pkl
+│   ├── english_test_cases.pkl
+│   ├── spanish_test_cases.pkl
+│   └── final_metrics.csv
+│
+├── main.py
+├── requirements.txt
+├── Dockerfile
+├── README.md
+└── FaseII_2026.ipynb
+```
+
+---
+
+## API REST
+
+### Health Check
+
+```http
+GET /
+```
+
+Respuesta:
+
+```json
+{
+  "status": "running",
+  "model": "Logistic Regression",
+  "f1_score": 0.9847
+}
+```
+
+---
+
+### Predicción
+
+```http
+POST /predict
+```
+
+Request:
+
+```json
+{
+  "text": "How can I open an investment account?"
+}
+```
+
+Response:
+
+```json
+{
+  "query": "How can I open an investment account?",
+  "intent": "create_account",
+  "confidence": 0.98
+}
+```
+
+---
+
+## Ejecución Local
+
+### Instalar dependencias
+
+```bash
+pip install -r requirements.txt
+```
+
+### Iniciar API
+
+```bash
+uvicorn main:app --host 0.0.0.0 --port 8000
+```
+
+### Swagger
+
+```text
+http://localhost:8000/docs
+```
+
+---
+
+## Docker
+
+### Construcción
+
+```bash
+docker build -t wealth-intent-classifier .
+```
+
+### Ejecución
+
+```bash
+docker run -p 8000:8000 wealth-intent-classifier
+```
+
+---
+
+## MLflow
+
+El proyecto utiliza MLflow para:
+
+- Registro de métricas.
+- Registro de hiperparámetros.
+- Seguimiento de experimentos.
+- Registro del modelo productivo.
+- Gestión de artefactos.
+
+---
+
+## Pruebas Realizadas
+
+### Casos en Inglés
+
+- Create Account
+- Portfolio Performance
+- Check Fees
+- Recover Password
+- Contact Manager
+- Account Balances
+
+### Casos en Español
+
+Se realizaron pruebas exploratorias para evaluar robustez multilingüe.
+
+Los resultados mostraron una disminución significativa del desempeño debido a que el modelo fue entrenado principalmente con consultas en inglés.
+
+---
+
+## Conclusiones
+
+El modelo Logistic Regression logró superar el objetivo SMART establecido obteniendo un F1-Score de 98.47%.
+
+La solución desarrollada permite clasificar de forma precisa consultas financieras relacionadas con gestión patrimonial, inversiones y administración de portafolios. Además, la implementación mediante FastAPI y Docker facilita el despliegue y la integración del modelo en entornos productivos.
+
+---
+
+## Autor
+
+Karla María Rodríguez Esquivel
